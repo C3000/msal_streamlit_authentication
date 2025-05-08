@@ -85,12 +85,13 @@ const Authentication = ({args}: ComponentProps) => {
 
     useEffect(() => {
         Streamlit.setComponentValue(loginToken);
-        if (!loginToken) {
-            Streamlit.setFrameHeight(50);
-        } else {
-            Streamlit.setFrameHeight();
-        }
+        Streamlit.setFrameHeight();
         Streamlit.setComponentReady();
+
+        const timeout = setTimeout(() => {
+            Streamlit.setFrameHeight();
+            clearTimeout(timeout);
+        }, 10);
     }, [loginToken]);
 
     const loginPopup = useCallback(() => {
