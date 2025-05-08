@@ -87,6 +87,11 @@ const Authentication = ({args}: ComponentProps) => {
         Streamlit.setComponentValue(loginToken);
         Streamlit.setFrameHeight();
         Streamlit.setComponentReady();
+
+        const timeout = setTimeout(() => {
+            Streamlit.setFrameHeight();
+            clearTimeout(timeout);
+        }, 10);
     }, [loginToken]);
 
     const loginPopup = useCallback(() => {
