@@ -4,7 +4,6 @@ __pycache__
 # JS misc
 node_modules
 build/
-dist/
 
 # IDE stuff
 .vscode

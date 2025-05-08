@@ -1,13 +1,13 @@
-import React, { useCallback, useEffect, useState, useRef } from "react"
+import React, {useCallback, useEffect, useState, useRef} from "react"
 import {
     withStreamlitConnection,
     Streamlit,
     ComponentProps,
 } from "streamlit-component-lib"
-import { PublicClientApplication, LogLevel } from "@azure/msal-browser";
+import {PublicClientApplication, LogLevel} from "@azure/msal-browser";
 
-const Authentication = ({ args }: ComponentProps) => {
-    const msalInstanceRef = useRef(null);
+const Authentication = ({args}: ComponentProps) => {
+    const msalInstanceRef = useRef<PublicClientApplication | null>(null);
     const [msalInitialized, setMsalInitialized] = useState(false);
 
     useEffect(() => {
@@ -52,6 +52,7 @@ const Authentication = ({ args }: ComponentProps) => {
     const logoutButtonText = args["logout_button_text"] ?? "";
     const buttonClass = args["class_name"] ?? "";
     const buttonId = args["html_id"] ?? "";
+    const hideUI = args["hide_ui"] ?? false;
 
     const [loginToken, setLoginToken] = useState(null);
 
@@ -60,8 +61,8 @@ const Authentication = ({ args }: ComponentProps) => {
     const isAuthenticated = useCallback(() => {
         const msalInstance = getMsalInstance();
         return msalInstance && msalInitialized &&
-               msalInstance.getAllAccounts &&
-               msalInstance.getAllAccounts().length > 0;
+            msalInstance.getAllAccounts &&
+            msalInstance.getAllAccounts().length > 0;
     }, [msalInitialized]);
 
     useEffect(() => {
@@ -112,11 +113,12 @@ const Authentication = ({ args }: ComponentProps) => {
     }
 
     return (
-        <div className="card">
-            <button onClick={isAuthenticated() ? logoutPopup : loginPopup} className={buttonClass} id={buttonId}>
-                {isAuthenticated() ? logoutButtonText : loginButtonText}
-            </button>
-        </div>
+        !hideUI && (
+            <div className="card">
+                <button onClick={isAuthenticated() ? logoutPopup : loginPopup} className={buttonClass} id={buttonId}>
+                    {isAuthenticated() ? logoutButtonText : loginButtonText}
+                </button>
+            </div>)
     );
 
 }
